@@ -3,7 +3,7 @@ FROM node:24.3.0-slim
 ENV INDEXER_NAME=collector
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends postgresql-client && \
+    apt-get install -y --no-install-recommends postgresql-client apt-utils && \
     rm -rf /var/lib/apt/lists/*
 
 ENV PNPM_HOME="/pnpm"
