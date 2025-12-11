@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "scripts": {
     "clean": "find src/indexers -type d -name 'generated' -exec rm -rf {} + || true",
+    "codegen:all": "pnpm collector:codegen && pnpm prices:codegen && pnpm oToken:codegen",
+    
     "collector:codegen": "envio codegen -d src/indexers/collector",
     "collector:dev": "envio dev -d src/indexers/collector",
     "collector:start": "envio start -d src/indexers/collector",
