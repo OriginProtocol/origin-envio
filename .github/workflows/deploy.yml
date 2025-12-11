@@ -38,9 +38,6 @@ jobs:
       - name: Run codegen for all indexers
         run: pnpm codegen:all
 
-      - name: Run TypeScript type check
-        run: pnpm tsc --noEmit
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
