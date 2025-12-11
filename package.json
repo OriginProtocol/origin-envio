@@ -3,16 +3,16 @@
   "version": "0.1.0",
   "scripts": {
     "clean": "find src/indexers -type d -name 'generated' -exec rm -rf {} + || true",
-    "codegen:all": "pnpm collector:codegen && pnpm prices:codegen && pnpm oToken:codegen",
-    "collector:codegen": "envio codegen -d src/indexers/collector",
-    "collector:dev": "envio dev -d src/indexers/collector",
-    "collector:start": "envio start -d src/indexers/collector",
-    "prices:codegen": "envio codegen -d src/indexers/prices",
-    "prices:dev": "envio dev -d src/indexers/prices",
-    "prices:start": "envio start -d src/indexers/prices",
-    "oToken:codegen": "envio codegen -d src/indexers/oToken",
-    "oToken:dev": "envio dev -d src/indexers/oToken",
-    "oToken:start": "envio start -d src/indexers/oToken"
+    "codegen": "pnpm run --parallel /^codegen:.*/",
+    "codegen:collector": "envio codegen -d src/indexers/collector",
+    "dev:collector": "envio dev -d src/indexers/collector",
+    "start:collector": "envio start -d src/indexers/collector",
+    "codegen:prices": "envio codegen -d src/indexers/prices",
+    "dev:prices": "envio dev -d src/indexers/prices",
+    "start:prices": "envio start -d src/indexers/prices",
+    "codegen:oToken": "envio codegen -d src/indexers/oToken",
+    "dev:oToken": "envio dev -d src/indexers/oToken",
+    "start:oToken": "envio start -d src/indexers/oToken"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

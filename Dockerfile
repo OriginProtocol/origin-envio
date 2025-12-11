@@ -1,6 +1,6 @@
 FROM node:24.3.0-slim
 
-ARG INDEXER_NAME
+ENV INDEXER_NAME=collector
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends postgresql-client && \
@@ -19,8 +19,6 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-ENV INDEXER_NAME=${INDEXER_NAME}
+RUN pnpm codegen
 
-RUN pnpm ${INDEXER_NAME}:codegen
-
-CMD pnpm ${INDEXER_NAME}:start
+CMD pnpm start:${INDEXER_NAME}

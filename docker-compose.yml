@@ -49,14 +49,13 @@ services:
     build:
       context: .      
       dockerfile: Dockerfile
-      args:
-        INDEXER_NAME: oToken
     ports:
       - "127.0.0.1:9898:${OTOKEN_INDEXER_PORT:-9898}"
     depends_on:
       - "hasura-oToken"
     restart: always
     environment:
+      INDEXER_NAME: oToken
       ENVIO_PG_PASSWORD: ${OTOKEN_PG_PASSWORD:-testing}
       ENVIO_PG_HOST: db-oToken
       ENVIO_PG_PORT: 5432
@@ -132,14 +131,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        INDEXER_NAME: collector
     ports:
       - "127.0.0.1:9899:${COLLECTOR_INDEXER_PORT:-9899}"
     depends_on:
       - "hasura-collector"
     restart: always
     environment:
+      INDEXER_NAME: collector
       ENVIO_PG_PASSWORD: ${COLLECTOR_PG_PASSWORD:-testing}
       ENVIO_PG_HOST: db-collector
       ENVIO_PG_PORT: 5432
@@ -215,14 +213,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        INDEXER_NAME: prices
     ports:
       - "127.0.0.1:9900:${PRICES_INDEXER_PORT:-9900}"
     depends_on:
       - "hasura-prices"
     restart: always
     environment:
+      INDEXER_NAME: prices
       ENVIO_PG_PASSWORD: ${PRICES_PG_PASSWORD:-testing}
       ENVIO_PG_HOST: db-prices
       ENVIO_PG_PORT: 5432
