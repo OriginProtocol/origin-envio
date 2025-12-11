@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=../../../node_modules/envio/evm.schema.json
+name: collector
+networks:
+- id: 1
+  start_block: 0
+  contracts:
+    - name: ERC20
+      handler: ./EventHandlers.ts
+      events:
+        - event: Transfer(address indexed from, address indexed to, uint256 value)
+          field_selection: 
+            transaction_fields:
+              - hash
+unordered_multichain_mode: true
+preload_handlers: true

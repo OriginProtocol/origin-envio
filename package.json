@@ -1,0 +1,47 @@
+{
+  "name": "origin-envio",
+  "version": "0.1.0",
+  "scripts": {
+    "clean": "find src/indexers -type d -name 'generated' -exec rm -rf {} + || true",
+    "collector:codegen": "envio codegen -d src/indexers/collector",
+    "collector:dev": "envio dev -d src/indexers/collector",
+    "collector:start": "envio start -d src/indexers/collector",
+    "prices:codegen": "envio codegen -d src/indexers/prices",
+    "prices:dev": "envio dev -d src/indexers/prices",
+    "prices:start": "envio start -d src/indexers/prices",
+    "oToken:codegen": "envio codegen -d src/indexers/oToken",
+    "oToken:dev": "envio dev -d src/indexers/oToken",
+    "oToken:start": "envio start -d src/indexers/oToken"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "10.0.6",
+    "@types/node": "20.8.8",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "chai": "4.3.10",
+    "eslint": "^9.39.1",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "mocha": "10.2.0",
+    "prettier": "^3.7.4",
+    "ts-mocha": "^10.0.0",
+    "typescript": "5.2.2",
+    "typescript-eslint": "^8.48.1"
+  },
+  "dependencies": {
+    "dnum": "^2.17.0",
+    "envio": "2.32.3",
+    "viem": "^2.41.2"
+  },
+  "optionalDependencies": {
+    "generated": "./generated"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

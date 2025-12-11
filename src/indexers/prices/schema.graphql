@@ -1,0 +1,8 @@
+type OraclePrice {
+  id: ID!
+  pair: String!
+  value: Float!
+  timestamp: Int!
+  block: Int!
+  chain_id: Int!
+}

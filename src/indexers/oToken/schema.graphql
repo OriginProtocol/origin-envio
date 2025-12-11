@@ -1,0 +1,153 @@
+# OToken Core Entities
+
+type OToken {
+  id: String! # chainId:address
+  chainId: Int!
+  address: String!
+  symbol: String
+  name: String
+  decimals: Int!
+  totalSupply: BigInt!
+  rebasingSupply: BigInt!
+  nonRebasingSupply: BigInt!
+  creditsPerToken: BigInt!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type OTokenAddress {
+  id: String! # chainId:otoken:address
+  chainId: Int!
+  otoken: String!
+  address: String!
+  balance: BigInt!
+  credits: BigInt!
+  rebasingCreditsPerToken: BigInt!
+  nonRebasingCreditsPerToken: BigInt!
+  rebasingOption: Boolean!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type OTokenRebase {
+  id: String! # chainId:blockNumber:logIndex
+  chainId: Int!
+  otoken: String!
+  epoch: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  totalSupply: BigInt!
+  rebasingSupply: BigInt!
+  nonRebasingSupply: BigInt!
+  creditsPerToken: BigInt!
+  rebaseYield: BigInt!
+  fees: BigInt!
+  transactionHash: String!
+  logIndex: Int!
+}
+
+type OTokenHistory {
+  id: String! # chainId:transactionHash:logIndex
+  chainId: Int!
+  otoken: String!
+  address: String!
+  transactionHash: String!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  eventType: String!
+  amount: BigInt!
+  balance: BigInt!
+  credits: BigInt!
+  logIndex: Int!
+}
+
+type OTokenAPY {
+  id: String! # chainId:otoken:date
+  chainId: Int!
+  otoken: String!
+  date: String!
+  apy: BigDecimal!
+  apy7d: BigDecimal!
+  apy14d: BigDecimal!
+  apy30d: BigDecimal!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type OTokenDailyStat {
+  id: String! # chainId:otoken:date
+  chainId: Int!
+  otoken: String!
+  date: String!
+  totalSupply: BigInt!
+  rebasingSupply: BigInt!
+  nonRebasingSupply: BigInt!
+  creditsPerToken: BigInt!
+  dailyYield: BigInt!
+  fees: BigInt!
+  transactions: Int!
+  uniqueHolders: Int!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type OTokenActivity {
+  id: String! # chainId:transactionHash:logIndex
+  chainId: Int!
+  otoken: String!
+  transactionHash: String!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  activityType: String!
+  from: String
+  to: String
+  amount: BigInt
+  logIndex: Int!
+}
+
+type OTokenWithdrawalRequest {
+  id: String! # chainId:otoken:requestId
+  chainId: Int!
+  otoken: String!
+  requestId: BigInt!
+  account: String!
+  amount: BigInt!
+  claimed: Boolean!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type WOToken {
+  id: String! # chainId:address
+  chainId: Int!
+  address: String!
+  otoken: String!
+  totalSupply: BigInt!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type OTokenVault {
+  id: String! # chainId:otoken:blockNumber
+  chainId: Int!
+  otoken: String!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  totalAssets: BigInt!
+  totalShares: BigInt!
+  buffer: BigInt!
+  createdAt: BigInt!
+}
+
+type OTokenDripperState {
+  id: String! # chainId:otoken:dripperAddress:blockNumber
+  chainId: Int!
+  otoken: String!
+  dripperAddress: String!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  dripRate: BigInt!
+  dripAmount: BigInt!
+  createdAt: BigInt!
+}
+

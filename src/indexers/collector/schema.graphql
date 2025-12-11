@@ -1,0 +1,17 @@
+type Token {
+  id: ID!
+  address: String!
+  symbol: String!
+  decimals: Int!
+}
+
+type Transfer {
+  id: ID!
+  from: String!
+  to: String!
+  value: BigInt!
+  fvalue: Float!
+  token: Token!
+  timestamp: Int!
+  txHash: String!
+}

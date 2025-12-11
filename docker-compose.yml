@@ -1,0 +1,259 @@
+services:
+  db-oToken:
+    image: postgres:17.5
+    container_name: db-oToken
+    restart: always
+    ports:
+      - "${OTOKEN_PG_PORT:-5432}:5432"
+    volumes:
+      - oToken-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${OTOKEN_PG_PASSWORD:-testing}
+      POSTGRES_USER: ${OTOKEN_PG_USER:-postgres}
+      POSTGRES_DB: ${OTOKEN_PG_DATABASE:-o_token}
+    networks:
+      - envio-oToken-network
+
+  hasura-oToken:
+    image: hasura/graphql-engine:v2.43.0
+    container_name: hasura-oToken
+    ports:
+      - "${OTOKEN_HASURA_PORT:-8080}:8080"
+    user: 1001:1001
+    depends_on:
+      - "db-oToken"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://${OTOKEN_PG_USER:-postgres}:${OTOKEN_PG_PASSWORD:-testing}@db-oToken:5432/${OTOKEN_PG_DATABASE:-o_token}
+      HASURA_GRAPHQL_ENABLE_CONSOLE: ${HASURA_GRAPHQL_ENABLE_CONSOLE:-true}
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES:
+        startup, http-log, webhook-log, websocket-log,
+        query-log
+      HASURA_GRAPHQL_NO_OF_RETRIES: 10
+      HASURA_GRAPHQL_ADMIN_SECRET: ${OTOKEN_HASURA_ADMIN_SECRET:-testing}
+      HASURA_GRAPHQL_STRINGIFY_NUMERIC_TYPES: "true"
+      PORT: 8080
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
+    healthcheck:
+      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 50
+      start_period: 5s
+    networks:
+      - envio-oToken-network
+
+  envio-oToken:
+    container_name: envio-oToken
+    image: origin-envio-envio-otoken:latest
+    build:
+      context: .      
+      dockerfile: Dockerfile
+      args:
+        INDEXER_NAME: oToken
+    ports:
+      - "127.0.0.1:9898:${OTOKEN_INDEXER_PORT:-9898}"
+    depends_on:
+      - "hasura-oToken"
+    restart: always
+    environment:
+      ENVIO_PG_PASSWORD: ${OTOKEN_PG_PASSWORD:-testing}
+      ENVIO_PG_HOST: db-oToken
+      ENVIO_PG_PORT: 5432
+      ENVIO_PG_USER: ${OTOKEN_PG_USER:-postgres}
+      ENVIO_PG_DATABASE: ${OTOKEN_PG_DATABASE:-o_token}
+      ENVIO_PG_PUBLIC_SCHEMA: ${OTOKEN_PG_PUBLIC_SCHEMA:-public}
+      ENVIO_INDEXER_HOST: 0.0.0.0
+      ENVIO_INDEXER_PORT: ${OTOKEN_INDEXER_PORT:-9898}
+      CONFIG_FILE: ${CONFIG_FILE:-config.yaml}
+      LOG_LEVEL: ${LOG_LEVEL:-trace}
+      LOG_STRATEGY: ${LOG_STRATEGY:-console-pretty}
+      HASURA_GRAPHQL_ENDPOINT: http://hasura-oToken:8080/v1/metadata
+      HASURA_GRAPHQL_ADMIN_SECRET: ${OTOKEN_HASURA_ADMIN_SECRET:-testing}
+      HASURA_SERVICE_HOST: hasura-oToken
+      HASURA_SERVICE_PORT: 8080
+      TUI_OFF: ${TUI_OFF:-true}
+    healthcheck:
+      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 50
+      start_period: 5s
+    networks:
+      - envio-oToken-network
+
+  db-collector:
+    image: postgres:17.5
+    container_name: db-collector
+    restart: always
+    ports:
+      - "${COLLECTOR_PG_PORT:-5433}:5432"
+    volumes:
+      - collector-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${COLLECTOR_PG_PASSWORD:-testing}
+      POSTGRES_USER: ${COLLECTOR_PG_USER:-postgres}
+      POSTGRES_DB: ${COLLECTOR_PG_DATABASE:-collector}
+    networks:
+      - envio-collector-network
+
+  hasura-collector:
+    image: hasura/graphql-engine:v2.43.0
+    container_name: hasura-collector
+    ports:
+      - "${COLLECTOR_HASURA_PORT:-8081}:8080"
+    user: 1001:1001
+    depends_on:
+      - "db-collector"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://${COLLECTOR_PG_USER:-postgres}:${COLLECTOR_PG_PASSWORD:-testing}@db-collector:5432/${COLLECTOR_PG_DATABASE:-collector}
+      HASURA_GRAPHQL_ENABLE_CONSOLE: ${HASURA_GRAPHQL_ENABLE_CONSOLE:-true}
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES:
+        startup, http-log, webhook-log, websocket-log,
+        query-log
+      HASURA_GRAPHQL_NO_OF_RETRIES: 10
+      HASURA_GRAPHQL_ADMIN_SECRET: ${COLLECTOR_HASURA_ADMIN_SECRET:-testing}
+      HASURA_GRAPHQL_STRINGIFY_NUMERIC_TYPES: "true"
+      PORT: 8080
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
+    healthcheck:
+      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 50
+      start_period: 5s
+    networks:
+      - envio-collector-network
+
+  envio-collector:
+    container_name: envio-collector
+    image: origin-envio-envio-collector:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        INDEXER_NAME: collector
+    ports:
+      - "127.0.0.1:9899:${COLLECTOR_INDEXER_PORT:-9899}"
+    depends_on:
+      - "hasura-collector"
+    restart: always
+    environment:
+      ENVIO_PG_PASSWORD: ${COLLECTOR_PG_PASSWORD:-testing}
+      ENVIO_PG_HOST: db-collector
+      ENVIO_PG_PORT: 5432
+      ENVIO_PG_USER: ${COLLECTOR_PG_USER:-postgres}
+      ENVIO_PG_DATABASE: ${COLLECTOR_PG_DATABASE:-collector}
+      ENVIO_PG_PUBLIC_SCHEMA: ${COLLECTOR_PG_PUBLIC_SCHEMA:-public}
+      ENVIO_INDEXER_HOST: 0.0.0.0
+      ENVIO_INDEXER_PORT: ${COLLECTOR_INDEXER_PORT:-9899}
+      CONFIG_FILE: ${CONFIG_FILE:-config.yaml}
+      LOG_LEVEL: ${LOG_LEVEL:-trace}
+      LOG_STRATEGY: ${LOG_STRATEGY:-console-pretty}
+      HASURA_GRAPHQL_ENDPOINT: http://hasura-collector:8080/v1/metadata
+      HASURA_GRAPHQL_ADMIN_SECRET: ${COLLECTOR_HASURA_ADMIN_SECRET:-testing}
+      HASURA_SERVICE_HOST: hasura-collector
+      HASURA_SERVICE_PORT: 8080
+      TUI_OFF: ${TUI_OFF:-true}
+    healthcheck:
+      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 50
+      start_period: 5s
+    networks:
+      - envio-collector-network
+
+  db-prices:
+    image: postgres:17.5
+    container_name: db-prices
+    restart: always
+    ports:
+      - "${PRICES_PG_PORT:-5434}:5432"
+    volumes:
+      - prices-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${PRICES_PG_PASSWORD:-testing}
+      POSTGRES_USER: ${PRICES_PG_USER:-postgres}
+      POSTGRES_DB: ${PRICES_PG_DATABASE:-prices}
+    networks:
+      - envio-prices-network
+
+  hasura-prices:
+    image: hasura/graphql-engine:v2.43.0
+    container_name: hasura-prices
+    ports:
+      - "${PRICES_HASURA_PORT:-8082}:8080"
+    user: 1001:1001
+    depends_on:
+      - "db-prices"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://${PRICES_PG_USER:-postgres}:${PRICES_PG_PASSWORD:-testing}@db-prices:5432/${PRICES_PG_DATABASE:-prices}
+      HASURA_GRAPHQL_ENABLE_CONSOLE: ${HASURA_GRAPHQL_ENABLE_CONSOLE:-true}
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES:
+        startup, http-log, webhook-log, websocket-log,
+        query-log
+      HASURA_GRAPHQL_NO_OF_RETRIES: 10
+      HASURA_GRAPHQL_ADMIN_SECRET: ${PRICES_HASURA_ADMIN_SECRET:-testing}
+      HASURA_GRAPHQL_STRINGIFY_NUMERIC_TYPES: "true"
+      PORT: 8080
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
+    healthcheck:
+      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 50
+      start_period: 5s
+    networks:
+      - envio-prices-network
+
+  envio-prices:
+    container_name: envio-prices
+    image: origin-envio-envio-prices:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        INDEXER_NAME: prices
+    ports:
+      - "127.0.0.1:9900:${PRICES_INDEXER_PORT:-9900}"
+    depends_on:
+      - "hasura-prices"
+    restart: always
+    environment:
+      ENVIO_PG_PASSWORD: ${PRICES_PG_PASSWORD:-testing}
+      ENVIO_PG_HOST: db-prices
+      ENVIO_PG_PORT: 5432
+      ENVIO_PG_USER: ${PRICES_PG_USER:-postgres}
+      ENVIO_PG_DATABASE: ${PRICES_PG_DATABASE:-prices}
+      ENVIO_PG_PUBLIC_SCHEMA: ${PRICES_PG_PUBLIC_SCHEMA:-public}
+      ENVIO_INDEXER_HOST: 0.0.0.0
+      ENVIO_INDEXER_PORT: ${PRICES_INDEXER_PORT:-9900}
+      CONFIG_FILE: ${CONFIG_FILE:-config.yaml}
+      LOG_LEVEL: ${LOG_LEVEL:-trace}
+      LOG_STRATEGY: ${LOG_STRATEGY:-console-pretty}
+      HASURA_GRAPHQL_ENDPOINT: http://hasura-prices:8080/v1/metadata
+      HASURA_GRAPHQL_ADMIN_SECRET: ${PRICES_HASURA_ADMIN_SECRET:-testing}
+      HASURA_SERVICE_HOST: hasura-prices
+      HASURA_SERVICE_PORT: 8080
+      TUI_OFF: ${TUI_OFF:-true}
+    healthcheck:
+      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 50
+      start_period: 5s
+    networks:
+      - envio-prices-network
+
+volumes:
+  oToken-data:
+  collector-data:
+  prices-data:
+
+networks:
+  envio-oToken-network:
+  envio-collector-network:
+  envio-prices-network:

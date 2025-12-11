@@ -1,0 +1,80 @@
+# yaml-language-server: $schema=../../../node_modules/envio/evm.schema.json
+name: prices
+networks:
+  - id: 1
+    start_block: 12000000
+    contracts:
+      - name: USDC_1_USD_Aggregator
+        address: '0xc9E1a09622afdB659913fefE800fEaE5DBbFe9d7'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+      - name: ETH_1_USD_Aggregator
+        address: '0x7d4E742018fb52E48b08BE73d041C18B21de6Fb5'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+      - name: USDT_1_USD_Aggregator
+        address: '0x0d5F4aADf3fde31BBB55dB5F42C080F18aD54Df5'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+      - name: OETH_1_ETH_1_Aggregator
+        address: '0x99528E2d228e322AEAEF24Dd763348a98A50c385'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+  - id: 8453
+    start_block: 12000000
+    contracts:
+      - name: ETH_8453_USD_Aggregator
+        address: '0x57d2d46Fc7ff2A7142d479F2f59e1E3F95447077'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+      - name: AERO_8453_USD_Aggregator
+        address: '0x57d2d46Fc7ff2A7142d479F2f59e1E3F95447077'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+      - name: OGN_8453_USD_Aggregator
+        address: '0x55012EF027ae9b4E2bb5a5f529E5a1184Bcc998D'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+      - name: USDC_8453_USD_Aggregator
+        address: '0x0Ee7145e1370653533e2F2E824424bE2AA95A4Aa'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+  - id: 146
+    start_block: 12000000
+    contracts:
+      - name: ETH_146_USD_Aggregator
+        address: '0x7fe2ADDE154eB97ad68D5aD70328a1DB13701Bc2'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+      - name: S_146_USD_Aggregator
+        address: '0x0BdbFF19543B20d0bc2d1eA08deE2be4C0b76743'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+      - name: OS_146_S_146_Aggregator
+        address: '0xb35dC10BF66F82D3efD8f08BE49c3BEC31c6efe4'
+        abi_file_path: ../../abis/OCR2Aggregator.json
+        handler: ./EventHandlers.ts
+        events:
+          - event: AnswerUpdated(int256 indexed current, uint256 indexed roundId, uint256 updatedAt)
+unordered_multichain_mode: true
+preload_handlers: true
