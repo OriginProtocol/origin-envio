@@ -21,4 +21,4 @@ COPY . .
 
 RUN pnpm codegen
 
-CMD pnpm start:${INDEXER_NAME}
+CMD ["sh", "-c", "pnpm start:${INDEXER_NAME}"]

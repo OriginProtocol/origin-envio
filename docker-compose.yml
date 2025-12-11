@@ -1,4 +1,12 @@
 services:
+  envio-base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: origin-envio:latest
+    # This service builds the common image used by all indexers
+    entrypoint: ["/bin/sh", "-c", "exit 0"]
+
   db-oToken:
     image: postgres:17.5
     container_name: db-oToken
@@ -45,14 +53,12 @@ services:
 
   envio-oToken:
     container_name: envio-oToken
-    image: origin-envio-envio-otoken:latest
-    build:
-      context: .      
-      dockerfile: Dockerfile
+    image: origin-envio:latest
+    depends_on:
+      - envio-base
+      - hasura-oToken
     ports:
       - "127.0.0.1:9898:${OTOKEN_INDEXER_PORT:-9898}"
-    depends_on:
-      - "hasura-oToken"
     restart: always
     environment:
       INDEXER_NAME: oToken
@@ -127,14 +133,12 @@ services:
 
   envio-collector:
     container_name: envio-collector
-    image: origin-envio-envio-collector:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: origin-envio:latest
+    depends_on:
+      - envio-base
+      - "hasura-collector"
     ports:
       - "127.0.0.1:9899:${COLLECTOR_INDEXER_PORT:-9899}"
-    depends_on:
-      - "hasura-collector"
     restart: always
     environment:
       INDEXER_NAME: collector
@@ -209,14 +213,12 @@ services:
 
   envio-prices:
     container_name: envio-prices
-    image: origin-envio-envio-prices:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: origin-envio:latest
+    depends_on:
+      - envio-base
+      - "hasura-prices"
     ports:
       - "127.0.0.1:9900:${PRICES_INDEXER_PORT:-9900}"
-    depends_on:
-      - "hasura-prices"
     restart: always
     environment:
       INDEXER_NAME: prices
