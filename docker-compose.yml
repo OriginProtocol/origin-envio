@@ -18,7 +18,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${OTOKEN_PG_PASSWORD:-testing}
       POSTGRES_USER: ${OTOKEN_PG_USER:-postgres}
-      POSTGRES_DB: ${OTOKEN_PG_DATABASE:-o_token}
+      POSTGRES_DB: ${OTOKEN_PG_DATABASE:-otoken}
     networks:
       - envio-oToken-network
 
@@ -60,8 +60,8 @@ services:
       ENVIO_PG_HOST: db-oToken
       ENVIO_PG_PORT: 5432
       ENVIO_PG_USER: ${OTOKEN_PG_USER:-postgres}
-      ENVIO_PG_DATABASE: ${OTOKEN_PG_DATABASE:-o_token}
-      ENVIO_PG_PUBLIC_SCHEMA: ${OTOKEN_PG_PUBLIC_SCHEMA:-public}
+      ENVIO_PG_DATABASE: ${OTOKEN_PG_DATABASE:-otoken}
+      ENVIO_PG_PUBLIC_SCHEMA: ${OTOKEN_PG_PUBLIC_SCHEMA:-envio}
       ENVIO_INDEXER_HOST: 0.0.0.0
       ENVIO_INDEXER_PORT: ${OTOKEN_INDEXER_PORT:-9898}
       CONFIG_FILE: ${CONFIG_FILE:-config.yaml}
@@ -72,12 +72,6 @@ services:
       HASURA_SERVICE_HOST: hasura-oToken
       HASURA_SERVICE_PORT: 8080
       TUI_OFF: ${TUI_OFF:-true}
-    healthcheck:
-      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
-      interval: 5s
-      timeout: 2s
-      retries: 50
-      start_period: 5s
     networks:
       - envio-oToken-network
 
@@ -116,12 +110,6 @@ services:
       HASURA_GRAPHQL_STRINGIFY_NUMERIC_TYPES: "true"
       PORT: 8080
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
-    healthcheck:
-      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
-      interval: 5s
-      timeout: 2s
-      retries: 50
-      start_period: 5s
     networks:
       - envio-collector-network
 
@@ -152,12 +140,6 @@ services:
       HASURA_SERVICE_HOST: hasura-collector
       HASURA_SERVICE_PORT: 8080
       TUI_OFF: ${TUI_OFF:-true}
-    healthcheck:
-      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
-      interval: 5s
-      timeout: 2s
-      retries: 50
-      start_period: 5s
     networks:
       - envio-collector-network
 
@@ -196,12 +178,6 @@ services:
       HASURA_GRAPHQL_STRINGIFY_NUMERIC_TYPES: "true"
       PORT: 8080
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
-    healthcheck:
-      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
-      interval: 5s
-      timeout: 2s
-      retries: 50
-      start_period: 5s
     networks:
       - envio-prices-network
 
@@ -232,12 +208,6 @@ services:
       HASURA_SERVICE_HOST: hasura-prices
       HASURA_SERVICE_PORT: 8080
       TUI_OFF: ${TUI_OFF:-true}
-    healthcheck:
-      test: timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
-      interval: 5s
-      timeout: 2s
-      retries: 50
-      start_period: 5s
     networks:
       - envio-prices-network
 
