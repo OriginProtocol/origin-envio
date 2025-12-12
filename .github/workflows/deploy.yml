@@ -17,7 +17,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -51,4 +50,14 @@ jobs:
           tags: |
             ${{ steps.prep.outputs.image_name }}:latest
             ${{ steps.prep.outputs.image_name }}:${{ github.sha }}
-          
+
+      - name: Trigger Railway redeployments
+        if: success()
+        uses: docker://ghcr.io/railwayapp/cli:latest
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        with:
+          args: |
+            redeploy --service=${{ secrets.RAILWAY_ID_COLLECTOR }} &&
+            redeploy --service=${{ secrets.RAILWAY_ID_PRICES }} &&
+            redeploy --service=${{ secrets.RAILWAY_ID_OTOKEN }}
