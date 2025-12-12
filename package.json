@@ -4,7 +4,7 @@
   "scripts": {
     "clean": "find src/indexers -type d -name 'generated' -exec rm -rf {} + || true",
     "codegen": "pnpm run --parallel /^codegen:.*/",
-    "start": "envio start -d src/indexers/collector --config config.yaml & echo 'Indexer started'",
+    "start": "envio start -d src/indexers/collector --config src/indexers/collector/config.yaml & echo 'Indexer started'",
     "codegen:collector": "envio codegen -d src/indexers/collector",
     "dev:collector": "envio dev -d src/indexers/collector",
     "start:collector": "envio start -d src/indexers/collector",
