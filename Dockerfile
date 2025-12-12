@@ -1,8 +1,5 @@
 FROM node:24.3.0-slim
 
-ARG ENVIO_API_TOKEN
-ENV ENVIO_API_TOKEN=${ENVIO_API_TOKEN}
-
 ENV INDEXER_NAME=collector
 
 RUN apt-get update && \
