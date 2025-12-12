@@ -62,6 +62,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Trigger Railway redeployments
         run: |
-          railway redeploy --service=${{ env.SVC_ID_COLLECTOR }}
-          railway redeploy --service=${{ env.SVC_ID_PRICES }}
-          railway redeploy --service=${{ env.SVC_ID_OTOKEN }}
+          railway redeploy -y -s ${{ env.SVC_ID_COLLECTOR }}
+          railway redeploy -y -s ${{ env.SVC_ID_PRICES }}
+          railway redeploy -y -s ${{ env.SVC_ID_OTOKEN }}
