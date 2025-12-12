@@ -1,5 +1,6 @@
 # yaml-language-server: $schema=../../../node_modules/envio/evm.schema.json
 name: collector
+output: "./generated"
 networks:
 - id: 1
   start_block: 0

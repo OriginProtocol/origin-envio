@@ -1,6 +1,8 @@
 # yaml-language-server: $schema=../../../node_modules/envio/evm.schema.json
 name: prices
+output: "./generated"
 networks:
+
   - id: 1
     start_block: 12000000
     contracts:
