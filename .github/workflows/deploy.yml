@@ -51,11 +51,17 @@ jobs:
   deploy-railway:
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
+    needs: build-and-push
     env:
-      SVC_ID_COLLECTOR: ${{ secrets.RAILWAY_ID_COLLECTOR }}
-      SVC_ID_PRICES: ${{ secrets.RAILWAY_ID_PRICES }}
-      SVC_ID_OTOKEN: ${{ secrets.RAILWAY_ID_COLLECTOR }}
+      SVC_ID_COLLECTOR: ${{ vars.RAILWAY_ID_COLLECTOR }}
+      SVC_ID_PRICES: ${{ vars.RAILWAY_ID_PRICES }}
+      SVC_ID_OTOKEN: ${{ vars.RAILWAY_ID_OTOKEN }}
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
-      - run: railway up --service=${{ env.SVC_ID_COLLECTOR }} && railway up --service=${{ env.SVC_ID_PRICES }} && railway up --service=${{ env.SVC_ID_OTOKEN }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Trigger Railway redeployments
+        run: |
+          railway redeploy --service=${{ env.SVC_ID_COLLECTOR }}
+          railway redeploy --service=${{ env.SVC_ID_PRICES }}
+          railway redeploy --service=${{ env.SVC_ID_OTOKEN }}
