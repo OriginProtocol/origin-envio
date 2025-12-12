@@ -1,23 +1,81 @@
-## Envio ERC20 Template
+# Origin Envio Indexers
 
-*Please refer to the [documentation website](https://docs.envio.dev) for a thorough guide on all [Envio](https://envio.dev) indexer features*
+Multi-indexer setup for Origin Protocol using [Envio](https://envio.dev) HyperIndex.
 
-### Run
+## Indexers
+
+- **collector** - Token transfers and events
+- **prices** - Price feed indexing
+- **oToken** - oToken rebase and supply tracking
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js v20
+- pnpm v9.7.1+
+- Docker Desktop
+
+### Local Development
 
 ```bash
-pnpm dev
-```
+# Install dependencies
+pnpm install
 
-Visit http://localhost:8080 to see the GraphQL Playground, local password is `testing`.
-
-### Generate files from `config.yaml` or `schema.graphql`
-
-```bash
+# Generate code for all indexers
 pnpm codegen
+
+# Run a specific indexer
+pnpm dev:collector
+pnpm dev:prices
+pnpm dev:oToken
+
+# Or use Docker Compose (runs all indexers)
+docker-compose up
 ```
 
-### Pre-requisites
+Visit http://localhost:8080 (Hasura Console) - default password: `testing`
 
-- [Node.js (use v18 or newer)](https://nodejs.org/en/download/current)
-- [pnpm (use v8 or newer)](https://pnpm.io/installation)
-- [Docker desktop](https://www.docker.com/products/docker-desktop/)
+### Code Generation
+
+After modifying `schema.graphql` or `config.yaml`:
+
+```bash
+# Generate for all indexers
+pnpm codegen
+
+# Generate for specific indexer
+pnpm codegen:collector
+pnpm codegen:prices
+pnpm codegen:oToken
+```
+
+## Deployment
+
+### Docker
+
+Build and push Docker image via GitHub Actions on push to `main`:
+
+```bash
+# Image is built and pushed to GitHub Container Registry
+ghcr.io/originprotocol/origin-envio:latest
+```
+
+## Project Structure
+
+```
+src/
+├── indexers/
+│   ├── collector/    # Token transfer indexer
+│   ├── prices/      # Price feed indexer
+│   └── oToken/      # oToken indexer
+├── abis/            # Contract ABIs
+├── constants/       # Shared constants
+└── utils/           # Utility functions
+```
+
+## Documentation
+
+- [Hasura Metadata Troubleshooting](./docs/RAILWAY_HASURA_METADATA.md)
+- [Envio Documentation](https://docs.envio.dev)
+
