@@ -78,4 +78,3 @@ src/
 
 - [Hasura Metadata Troubleshooting](./docs/RAILWAY_HASURA_METADATA.md)
 - [Envio Documentation](https://docs.envio.dev)
-
