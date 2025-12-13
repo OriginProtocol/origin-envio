@@ -1,3 +1,4 @@
+import { ZERO_ADDRESS } from '../../constants/addresses';
 import {
   generateOTokenActivityId,
   generateOTokenAddressId,
@@ -8,9 +9,6 @@ import {
 import { getTokenByAddress } from '../../utils/getToken';
 import { OToken } from './generated';
 import { calculateRebase } from './oTokenRebase';
-
-// Zero address constant
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 /**
  * Handle Transfer events

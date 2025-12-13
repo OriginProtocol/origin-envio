@@ -1,5 +1,3 @@
-import { toNumber } from 'dnum';
-
 import { getTokenByAddress } from '../../utils/getToken';
 import { ERC20 } from './generated';
 
@@ -29,7 +27,6 @@ ERC20.Transfer.handler(
         from: event.params.from,
         to: event.params.to,
         value: event.params.value,
-        fvalue: toNumber([event.params.value, token.decimals]),
         timestamp: event.block.timestamp,
         txHash: event.transaction.hash,
         token_id: token.id,
