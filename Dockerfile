@@ -1,4 +1,4 @@
-FROM node:24.3.0-slim
+FROM node:20-slim
 
 ENV INDEXER_NAME=collector
 

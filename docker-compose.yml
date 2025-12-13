@@ -32,7 +32,7 @@ services:
       - "db-oToken"
     restart: always
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://${OTOKEN_PG_USER:-postgres}:${OTOKEN_PG_PASSWORD:-testing}@db-oToken:5432/${OTOKEN_PG_DATABASE:-o_token}
+      HASURA_GRAPHQL_DATABASE_URL: postgres://${OTOKEN_PG_USER:-postgres}:${OTOKEN_PG_PASSWORD:-testing}@db-oToken:5432/${OTOKEN_PG_DATABASE:-otoken}
       HASURA_GRAPHQL_ENABLE_CONSOLE: ${HASURA_GRAPHQL_ENABLE_CONSOLE:-true}
       HASURA_GRAPHQL_ENABLED_LOG_TYPES:
         startup, http-log, webhook-log, websocket-log,
