@@ -6,11 +6,14 @@
     "checkJs": false,
     "outDir": "build",
     "strict": true,
+    "isolatedModules": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "module": "CommonJS"
+    "module": "CommonJS",
+    "moduleResolution": "node"
   },
-  "include": ["src/**/*", "test"]
+  "include": ["src/**/*", "test"],
+  "exclude": ["node_modules", "build"]
 }

@@ -12,7 +12,7 @@ services:
     container_name: db-oToken
     restart: always
     ports:
-      - "${OTOKEN_PG_PORT:-5432}:5432"
+      - "${OTOKEN_PG_PORT:-5433}:5432"
     volumes:
       - oToken-data:/var/lib/postgresql/data
     environment:
@@ -26,7 +26,7 @@ services:
     image: hasura/graphql-engine:v2.43.0
     container_name: hasura-oToken
     ports:
-      - "${OTOKEN_HASURA_PORT:-8080}:8080"
+      - "${OTOKEN_HASURA_PORT:-8081}:8080"
     user: 1001:1001
     depends_on:
       - "db-oToken"
@@ -52,7 +52,7 @@ services:
       - envio-base
       - hasura-oToken
     ports:
-      - "127.0.0.1:9898:${OTOKEN_INDEXER_PORT:-9898}"
+      - "127.0.0.1:9899:${OTOKEN_INDEXER_PORT:-9899}"
     restart: always
     environment:
       INDEXER_NAME: oToken
@@ -63,7 +63,7 @@ services:
       ENVIO_PG_DATABASE: ${OTOKEN_PG_DATABASE:-otoken}
       ENVIO_PG_PUBLIC_SCHEMA: ${OTOKEN_PG_PUBLIC_SCHEMA:-envio}
       ENVIO_INDEXER_HOST: 0.0.0.0
-      ENVIO_INDEXER_PORT: ${OTOKEN_INDEXER_PORT:-9898}
+      ENVIO_INDEXER_PORT: ${OTOKEN_INDEXER_PORT:-9899}
       CONFIG_FILE: ${CONFIG_FILE:-config.yaml}
       LOG_LEVEL: ${LOG_LEVEL:-trace}
       LOG_STRATEGY: ${LOG_STRATEGY:-console-pretty}
@@ -80,7 +80,7 @@ services:
     container_name: db-collector
     restart: always
     ports:
-      - "${COLLECTOR_PG_PORT:-5433}:5432"
+      - "${COLLECTOR_PG_PORT:-5434}:5432"
     volumes:
       - collector-data:/var/lib/postgresql/data
     environment:
@@ -94,7 +94,7 @@ services:
     image: hasura/graphql-engine:v2.43.0
     container_name: hasura-collector
     ports:
-      - "${COLLECTOR_HASURA_PORT:-8081}:8080"
+      - "${COLLECTOR_HASURA_PORT:-8082}:8080"
     user: 1001:1001
     depends_on:
       - "db-collector"
@@ -120,7 +120,7 @@ services:
       - envio-base
       - "hasura-collector"
     ports:
-      - "127.0.0.1:9899:${COLLECTOR_INDEXER_PORT:-9899}"
+      - "127.0.0.1:9900:${COLLECTOR_INDEXER_PORT:-9900}"
     restart: always
     environment:
       INDEXER_NAME: collector
@@ -129,9 +129,9 @@ services:
       ENVIO_PG_PORT: 5432
       ENVIO_PG_USER: ${COLLECTOR_PG_USER:-postgres}
       ENVIO_PG_DATABASE: ${COLLECTOR_PG_DATABASE:-collector}
-      ENVIO_PG_PUBLIC_SCHEMA: ${COLLECTOR_PG_PUBLIC_SCHEMA:-public}
+      ENVIO_PG_PUBLIC_SCHEMA: ${COLLECTOR_PG_PUBLIC_SCHEMA:-envio}
       ENVIO_INDEXER_HOST: 0.0.0.0
-      ENVIO_INDEXER_PORT: ${COLLECTOR_INDEXER_PORT:-9899}
+      ENVIO_INDEXER_PORT: ${COLLECTOR_INDEXER_PORT:-9900}
       CONFIG_FILE: ${CONFIG_FILE:-config.yaml}
       LOG_LEVEL: ${LOG_LEVEL:-trace}
       LOG_STRATEGY: ${LOG_STRATEGY:-console-pretty}
@@ -148,7 +148,7 @@ services:
     container_name: db-prices
     restart: always
     ports:
-      - "${PRICES_PG_PORT:-5434}:5432"
+      - "${PRICES_PG_PORT:-5435}:5432"
     volumes:
       - prices-data:/var/lib/postgresql/data
     environment:
@@ -162,7 +162,7 @@ services:
     image: hasura/graphql-engine:v2.43.0
     container_name: hasura-prices
     ports:
-      - "${PRICES_HASURA_PORT:-8082}:8080"
+      - "${PRICES_HASURA_PORT:-8083}:8080"
     user: 1001:1001
     depends_on:
       - "db-prices"
@@ -188,7 +188,7 @@ services:
       - envio-base
       - "hasura-prices"
     ports:
-      - "127.0.0.1:9900:${PRICES_INDEXER_PORT:-9900}"
+      - "127.0.0.1:9901:${PRICES_INDEXER_PORT:-9901}"
     restart: always
     environment:
       INDEXER_NAME: prices
@@ -197,9 +197,9 @@ services:
       ENVIO_PG_PORT: 5432
       ENVIO_PG_USER: ${PRICES_PG_USER:-postgres}
       ENVIO_PG_DATABASE: ${PRICES_PG_DATABASE:-prices}
-      ENVIO_PG_PUBLIC_SCHEMA: ${PRICES_PG_PUBLIC_SCHEMA:-public}
+      ENVIO_PG_PUBLIC_SCHEMA: ${PRICES_PG_PUBLIC_SCHEMA:-envio}
       ENVIO_INDEXER_HOST: 0.0.0.0
-      ENVIO_INDEXER_PORT: ${PRICES_INDEXER_PORT:-9900}
+      ENVIO_INDEXER_PORT: ${PRICES_INDEXER_PORT:-9901}
       CONFIG_FILE: ${CONFIG_FILE:-config.yaml}
       LOG_LEVEL: ${LOG_LEVEL:-trace}
       LOG_STRATEGY: ${LOG_STRATEGY:-console-pretty}

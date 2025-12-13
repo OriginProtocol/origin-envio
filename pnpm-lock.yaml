@@ -72,10 +72,6 @@ importers:
       typescript-eslint:
         specifier: ^8.49.0
         version: 8.49.0(eslint@9.39.2)(typescript@5.2.2)
-    optionalDependencies:
-      generated:
-        specifier: link:generated
-        version: link:generated
 
 packages:
 
