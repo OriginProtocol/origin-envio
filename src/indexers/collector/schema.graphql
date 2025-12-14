@@ -3,6 +3,7 @@ type Token {
   address: String!
   symbol: String!
   decimals: Int!
+  chainId: Int!
 }
 
 type Transfer {

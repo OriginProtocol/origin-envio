@@ -18,6 +18,7 @@ ERC20.Transfer.handler(
         address: event.srcAddress,
         symbol: token.symbol,
         decimals: token.decimals,
+        chainId: event.chainId,
       });
     }
 
