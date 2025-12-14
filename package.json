@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "clean": "find src/indexers -type d -name 'generated' -exec rm -rf {} + || true",
-    "codegen": "pnpm run /^codegen:.*/ --parallel",
+    "codegen": "pnpm run /^codegen:.*/ --parallel --aggregate-output",
     "start": "envio start -d src/indexers/collector --config src/indexers/collector/config.yaml && echo 'Indexer started'",
     "codegen:collector": "envio codegen -d src/indexers/collector && node scripts/fix-generated-package-names.mjs collector",
     "dev:collector": "envio dev -d src/indexers/collector",
