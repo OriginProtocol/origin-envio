@@ -5,15 +5,12 @@ import {
   generateOTokenHistoryId,
   generateOTokenId,
   generateOTokenRebaseId,
+  generateOTokenWithdrawalRequestId,
 } from '../../utils/compositeIds';
 import { getTokenByAddress } from '../../utils/getToken';
-import { OToken } from './generated';
+import { OToken, OTokenVault } from './generated';
 import { calculateRebase } from './oTokenRebase';
 
-/**
- * Handle Transfer events
- * Updates OTokenAddress balances and creates history/activity records
- */
 OToken.Transfer.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const tokenAddress = event.srcAddress.toLowerCase();
@@ -129,7 +126,7 @@ OToken.Transfer.handler(async ({ event, context }) => {
       generateOTokenAddressId(chainId, tokenAddress, from),
     );
 
-    context.OTokenHistory.set({
+    context.History.set({
       id: fromHistoryId,
       chainId,
       otoken: tokenAddress,
@@ -156,7 +153,7 @@ OToken.Transfer.handler(async ({ event, context }) => {
       generateOTokenAddressId(chainId, tokenAddress, to),
     );
 
-    context.OTokenHistory.set({
+    context.History.set({
       id: toHistoryId,
       chainId,
       otoken: tokenAddress,
@@ -179,7 +176,7 @@ OToken.Transfer.handler(async ({ event, context }) => {
     event.logIndex,
   );
 
-  context.OTokenActivity.set({
+  context.Activity.set({
     id: activityId,
     chainId,
     otoken: tokenAddress,
@@ -194,10 +191,6 @@ OToken.Transfer.handler(async ({ event, context }) => {
   });
 });
 
-/**
- * Handle Rebase events
- * Updates OToken supply and creates rebase records
- */
 OToken.Rebase.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const tokenAddress = event.srcAddress.toLowerCase();
@@ -254,7 +247,7 @@ OToken.Rebase.handler(async ({ event, context }) => {
     event.logIndex,
   );
 
-  context.OTokenRebase.set({
+  context.Rebase.set({
     id: rebaseId,
     chainId,
     otoken: tokenAddress,
@@ -269,5 +262,56 @@ OToken.Rebase.handler(async ({ event, context }) => {
     fees: rebaseData.fees,
     transactionHash: event.transaction.hash,
     logIndex: event.logIndex,
+  });
+});
+
+OTokenVault.WithdrawalRequested.handler(async ({ event, context }) => {
+  const chainId = event.chainId;
+  const otoken = event.srcAddress.toLowerCase();
+  const withdrawer = event.params.withdrawer.toLowerCase();
+  const requestId = BigInt(event.params.requestId);
+  const amount = BigInt(event.params.amount);
+  const queued = BigInt(event.params.queued);
+  const timestamp = BigInt(event.block.timestamp);
+  const hash = event.transaction.hash;
+
+  const extraBytes = event.transaction.input.slice(74);
+  let queueWait: bigint | undefined;
+  if (extraBytes.length > 0) {
+    queueWait = BigInt('0x' + extraBytes);
+  }
+
+  context.WithdrawalRequest.set({
+    id: generateOTokenWithdrawalRequestId(chainId, otoken, requestId),
+    chainId,
+    otoken,
+    withdrawer,
+    requestId,
+    amount,
+    queued,
+    claimed: false,
+    queueWait,
+    createdAt: timestamp,
+    updatedAt: timestamp,
+    hash,
+  });
+});
+
+OTokenVault.WithdrawalClaimed.handler(async ({ event, context }) => {
+  const chainId = event.chainId;
+  const otoken = event.srcAddress.toLowerCase();
+  const requestId = BigInt(event.params.requestId);
+
+  const request = await context.WithdrawalRequest.get(
+    generateOTokenWithdrawalRequestId(chainId, otoken, requestId),
+  );
+  if (!request) {
+    return;
+  }
+
+  context.WithdrawalRequest.set({
+    ...request,
+    claimed: true,
+    updatedAt: BigInt(event.block.timestamp),
   });
 });

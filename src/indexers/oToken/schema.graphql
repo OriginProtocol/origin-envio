@@ -1,7 +1,7 @@
 # OToken Core Entities
 
 type OToken {
-  id: String! # chainId:address
+  id: ID! # chainId:address
   chainId: Int!
   address: String!
   symbol: String
@@ -16,7 +16,7 @@ type OToken {
 }
 
 type OTokenAddress {
-  id: String! # chainId:otoken:address
+  id: ID! # chainId:otoken:address
   chainId: Int!
   otoken: String!
   address: String!
@@ -29,8 +29,8 @@ type OTokenAddress {
   updatedAt: BigInt!
 }
 
-type OTokenRebase {
-  id: String! # chainId:blockNumber:logIndex
+type Rebase {
+  id: ID! # chainId:blockNumber:logIndex
   chainId: Int!
   otoken: String!
   epoch: BigInt!
@@ -46,8 +46,8 @@ type OTokenRebase {
   logIndex: Int!
 }
 
-type OTokenHistory {
-  id: String! # chainId:transactionHash:logIndex
+type History {
+  id: ID! # chainId:transactionHash:logIndex
   chainId: Int!
   otoken: String!
   address: String!
@@ -61,8 +61,8 @@ type OTokenHistory {
   logIndex: Int!
 }
 
-type OTokenAPY {
-  id: String! # chainId:otoken:date
+type Apy {
+  id: ID! # chainId:otoken:date
   chainId: Int!
   otoken: String!
   date: String!
@@ -74,8 +74,8 @@ type OTokenAPY {
   updatedAt: BigInt!
 }
 
-type OTokenDailyStat {
-  id: String! # chainId:otoken:date
+type DailyStat {
+  id: ID! # chainId:otoken:date
   chainId: Int!
   otoken: String!
   date: String!
@@ -91,8 +91,8 @@ type OTokenDailyStat {
   updatedAt: BigInt!
 }
 
-type OTokenActivity {
-  id: String! # chainId:transactionHash:logIndex
+type Activity {
+  id: ID! # chainId:transactionHash:logIndex
   chainId: Int!
   otoken: String!
   transactionHash: String!
@@ -105,20 +105,23 @@ type OTokenActivity {
   logIndex: Int!
 }
 
-type OTokenWithdrawalRequest {
-  id: String! # chainId:otoken:requestId
+type WithdrawalRequest {
+  id: ID! # chainId:otoken:requestId
   chainId: Int!
   otoken: String!
+  withdrawer: String!
   requestId: BigInt!
-  account: String!
   amount: BigInt!
   claimed: Boolean!
   createdAt: BigInt!
   updatedAt: BigInt!
+  queued: BigInt!
+  queueWait: BigInt
+  hash: String!
 }
 
 type WOToken {
-  id: String! # chainId:address
+  id: ID! # chainId:address
   chainId: Int!
   address: String!
   otoken: String!
@@ -127,8 +130,8 @@ type WOToken {
   updatedAt: BigInt!
 }
 
-type OTokenVault {
-  id: String! # chainId:otoken:blockNumber
+type Vault {
+  id: ID! # chainId:otoken:blockNumber
   chainId: Int!
   otoken: String!
   blockNumber: BigInt!
@@ -139,8 +142,8 @@ type OTokenVault {
   createdAt: BigInt!
 }
 
-type OTokenDripperState {
-  id: String! # chainId:otoken:dripperAddress:blockNumber
+type DripperState {
+  id: ID! # chainId:otoken:dripperAddress:blockNumber
   chainId: Int!
   otoken: String!
   dripperAddress: String!
@@ -150,4 +153,3 @@ type OTokenDripperState {
   dripAmount: BigInt!
   createdAt: BigInt!
 }
-
